@@ -2,4 +2,5 @@ venv
 .vscode
 downloads
 decompressed
+test-decompressed
 __pycache__
