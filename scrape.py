@@ -10,7 +10,7 @@ ANCHOR_TAG = "a"
 DOWNLOAD_ATTRIBUTE = "download"
 HREF = "href"
 FOLDER_NAME = "downloads"
-TARGET_PRODUCT_CATEGORY = "Subscription_Boxes"
+TARGET_PRODUCT_CATEGORIES = ["Subscription_Boxes", "Magazine_Subscriptions"]
 
 
 def main():
@@ -31,26 +31,28 @@ def main():
 
         # Save review and metadata files for the target download category
         for link in download_links:
-            if TARGET_PRODUCT_CATEGORY in link[HREF]:
-                url = link[HREF]
-                tokens = url.strip().split("/")
+            for target_product_category in TARGET_PRODUCT_CATEGORIES:
+                if target_product_category in link[HREF]:
+                    url = link[HREF]
+                    tokens = url.strip().split("/")
 
-                # Make folder to store downloaded file
-                category = tokens[-2]
-                folder_path = os.path.join(os.getcwd(), f"{FOLDER_NAME}/{category}")
-                os.makedirs(folder_path, exist_ok=True)
+                    # Make folder to store downloaded file
+                    category = tokens[-2]
+                    folder_path = os.path.join(os.getcwd(), f"{FOLDER_NAME}/{category}")
+                    os.makedirs(folder_path, exist_ok=True)
 
-                # Store file
-                filename = tokens[-1]
-                file_path = os.path.join(folder_path, filename)
-                start_time = time.perf_counter()
-                download_response = requests.get(url, TIMEOUT_SECONDS)
-                with open(file_path, "wb") as file:
-                    file.write(download_response.content)
-                end_time = time.perf_counter()
-                print(
-                    f"Successfully saved file from {url} to {file_path} in {end_time - start_time} seconds.\n"
-                )
+                    # Store file
+                    filename = tokens[-1]
+                    file_path = os.path.join(folder_path, filename)
+                    start_time = time.perf_counter()
+                    download_response = requests.get(url, TIMEOUT_SECONDS)
+                    with open(file_path, "wb") as file:
+                        file.write(download_response.content)
+                    end_time = time.perf_counter()
+                    print(
+                        f"Successfully saved file from {url} to {file_path} in {end_time - start_time} seconds.\n"
+                    )
+                    break
     except Exception as err:
         print(f"Unexpected {err=}, {type(err)=}")
 
