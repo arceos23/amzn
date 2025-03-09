@@ -4,3 +4,4 @@ downloads
 decompressed
 test-decompressed
 __pycache__
+.env
