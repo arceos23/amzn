@@ -32,7 +32,9 @@ async def root(title=""):
                 os.environ.get("ES_LOCAL_PASSWORD"),
             ),
         )
-        s = Search(index="product").query("match", title=title)
+        s = Search(index="product").query(
+            "fuzzy", title={"value": title, "fuzziness": "AUTO"}
+        )
         response = s.execute()
         return [hit for hit in response]
 
